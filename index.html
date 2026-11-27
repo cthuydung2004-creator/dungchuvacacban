@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi" data-palette="sakura" data-mode="light">
+<html lang="vi" data-palette="lagoon" data-mode="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -166,6 +166,15 @@
             --accent-shadow: rgba(199, 132, 117, 0.28);
         }
 
+        [data-palette="lagoon"] {
+            --bg-page: #f0f6f5; --bg-dot: #d3e4df; --bg-surface: #fff;
+            --bg-subtle: #edf6f2; --border-subtle: #cbded8;
+            --text-primary: #173c38; --text-secondary: #48655d;
+            --accent: #187469; --accent-hover: #0d5c54;
+            --accent-soft: #d7f0e6; --accent-soft-text: #135e55;
+            --accent-gradient: linear-gradient(125deg,#155e58,#25796f);
+            --accent-shadow: rgba(22,101,89,.18);
+        }
         /* ==================== DARK MODE OVERRIDES ==================== */
         [data-mode="dark"] {
             --bg-page: #15141A;
@@ -616,6 +625,30 @@
         .wheel-container {
             transition: transform 3.8s cubic-bezier(0.17, 0.67, 0.12, 0.99);
         }
+
+        .community-layout { width:min(100%,1280px); margin:0 auto; padding:24px clamp(16px,3vw,40px); display:grid; grid-template-columns:192px minmax(0,1fr); align-items:start; gap:clamp(16px,3vw,40px) }
+        .community-content { min-width:0 }
+        #main-nav-desktop { display:flex; flex-direction:column; align-items:stretch; gap:6px; position:sticky; top:84px; margin:0; padding:10px; border:1px solid var(--border-subtle); border-radius:20px; background:var(--bg-surface); box-shadow:0 8px 26px rgba(28,60,55,.06) }
+        #main-nav-desktop button { justify-content:flex-start; min-height:46px; padding:0 12px; gap:12px }
+        #main-nav-desktop [data-label] { display:inline }
+        #main-nav-desktop i { width:22px; text-align:center }
+        #main-nav-desktop .noti-badge { top:3px; right:3px }
+        .community-content main { max-width:1000px; padding:0 }
+        #view-lounge,#view-noti { max-width:960px }
+        [data-palette="lagoon"]:not([data-theme])[data-mode="light"] .community-content .bg-cream { background-color:var(--bg-subtle) }
+        [data-palette="lagoon"]:not([data-theme])[data-mode="light"] #view-home [data-goto-tab="groups"] { background:#fff1dd; border-color:#efdcbe }
+        [data-palette="lagoon"]:not([data-theme])[data-mode="light"] #stat-groups { color:#985516 !important }
+        [data-palette="lagoon"]:not([data-theme])[data-mode="light"] #stat-memories { color:#785593 !important }
+        [data-palette="lagoon"]:not([data-theme])[data-mode="light"] #view-home .grid-cols-3 > div { background:#f1ebf7; border-color:#e0d4e9 }
+        #view-home > section:first-child { background:linear-gradient(115deg,var(--bg-surface) 28%,var(--accent-soft)); border-color:var(--border-subtle) }
+        #theme-popover { max-height:calc(100dvh - 5rem); overflow:auto }
+        #groups-grid { grid-template-columns:repeat(auto-fill,minmax(min(100%,215px),1fr)) }
+        @media (max-width:760px) {
+            .community-layout { display:block; padding:16px 12px 90px }
+            #main-nav-desktop { position:fixed; top:auto; bottom:0; left:0; right:0; z-index:40; border-radius:16px 16px 0 0; display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:2px; padding:5px 4px max(5px,env(safe-area-inset-bottom)) }
+            #main-nav-desktop button { flex-direction:column; justify-content:center; gap:2px; min-width:0; padding:3px; font-size:10px }
+            #main-nav-desktop [data-label] { max-width:100% }
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col antialiased selection:bg-rose-200 selection:text-rose-900">
@@ -754,8 +787,12 @@
             </div>
 
             <!-- 7 Pastel Colors -->
-            <p class="text-[11px] font-bold text-stone-500 uppercase tracking-wider mb-2">Chọn 1 trong 7 màu Pastel</p>
+            <p class="text-[11px] font-bold text-stone-500 uppercase tracking-wider mb-2">Chọn bảng màu</p>
             <div class="grid grid-cols-1 gap-1.5" id="palette-options">
+                <button type="button" data-set-palette="lagoon" class="palette-btn flex items-center justify-between px-3 py-2 rounded-xl hover:bg-cream transition text-left">
+                    <span class="flex items-center gap-2.5 text-xs font-bold"><span class="w-5 h-5 rounded-full shadow-inner border border-white" style="background:#187469"></span> Xanh vịnh biển</span>
+                    <i class="fa-solid fa-check text-xs opacity-0 palette-check theme-accent-text"></i>
+                </button>
                 <button type="button" data-set-palette="peach" class="palette-btn flex items-center justify-between px-3 py-2 rounded-xl hover:bg-cream transition text-left">
                     <span class="flex items-center gap-2.5 text-xs font-bold"><span class="w-5 h-5 rounded-full shadow-inner border border-white" style="background:#F58A53"></span> Cam Đào (Peach Cream)</span>
                     <i class="fa-solid fa-check text-xs opacity-0 palette-check theme-accent-text"></i>
@@ -925,25 +962,6 @@
                     </button>
                 </div>
 
-                <!-- Center: 5-tab main navigation (desktop) -->
-                <nav id="main-nav-desktop" class="hidden lg:flex flex-1 min-w-0 items-center justify-center gap-1 mx-2">
-                    <button type="button" data-main-tab="home" data-nav-variant="desktop" title="Trang chủ" class="main-nav-btn relative h-10 px-3 xl:px-4 rounded-xl text-sm font-bold flex items-center gap-2 transition text-stone-600 hover:bg-cream">
-                        <i class="fa-solid fa-house"></i><span data-label="navHome" class="hidden xl:inline max-w-[120px] truncate">Trang chủ</span>
-                    </button>
-                    <button type="button" data-main-tab="lounge" data-nav-variant="desktop" title="Giao lưu" class="main-nav-btn relative h-10 px-3 xl:px-4 rounded-xl text-sm font-bold flex items-center gap-2 transition text-stone-600 hover:bg-cream">
-                        <i class="fa-solid fa-comments"></i><span data-label="navLounge" class="hidden xl:inline max-w-[120px] truncate">Giao lưu</span>
-                    </button>
-                    <button type="button" data-main-tab="groups" data-nav-variant="desktop" title="Nhóm" class="main-nav-btn relative h-10 px-3 xl:px-4 rounded-xl text-sm font-bold flex items-center gap-2 transition text-stone-600 hover:bg-cream">
-                        <i class="fa-solid fa-people-group"></i><span data-label="navGroups" class="hidden xl:inline max-w-[120px] truncate">Nhóm</span>
-                    </button>
-                    <button type="button" data-main-tab="noti" data-nav-variant="desktop" title="Thông báo" class="main-nav-btn relative h-10 px-3 xl:px-4 rounded-xl text-sm font-bold flex items-center gap-2 transition text-stone-600 hover:bg-cream">
-                        <i class="fa-solid fa-bell"></i><span data-label="navNoti" class="hidden xl:inline max-w-[120px] truncate">Thông báo</span><span class="noti-badge hidden absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-rose-500 text-white text-[10px] font-bold flex items-center justify-center ring-2 ring-white">0</span>
-                    </button>
-                    <button type="button" data-main-tab="members" data-nav-variant="desktop" title="Thành viên" class="main-nav-btn relative h-10 px-3 xl:px-4 rounded-xl text-sm font-bold flex items-center gap-2 transition text-stone-600 hover:bg-cream">
-                        <i class="fa-solid fa-users"></i><span data-label="navMembers" class="hidden xl:inline max-w-[120px] truncate">Thành viên</span>
-                    </button>
-                </nav>
-
                 <!-- Right: Theme, Admin, Profile, Logout -->
                 <div class="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
                     <button type="button" class="quick-mode-btn w-9 h-9 rounded-xl bg-cream border border-stone-200/80 flex items-center justify-center text-sm hover:opacity-80 transition" title="Chuyển chế độ Sáng / Tối">
@@ -970,25 +988,27 @@
                     </button>
                 </div>
             </div>
-            <!-- 5-tab main navigation (mobile / tablet) -->
-            <nav id="main-nav-mobile" class="lg:hidden max-w-3xl mx-auto grid grid-cols-5 border-t border-stone-200/70">
-                <button type="button" data-main-tab="home" data-nav-variant="mobile" class="main-nav-btn relative py-2 flex flex-col items-center gap-0.5 text-[10px] font-bold transition text-stone-600">
-                    <i class="fa-solid fa-house text-base"></i><span data-label="navHome" class="max-w-full truncate px-1">Trang chủ</span>
-                </button>
-                <button type="button" data-main-tab="lounge" data-nav-variant="mobile" class="main-nav-btn relative py-2 flex flex-col items-center gap-0.5 text-[10px] font-bold transition text-stone-600">
-                    <i class="fa-solid fa-comments text-base"></i><span data-label="navLounge" class="max-w-full truncate px-1">Giao lưu</span>
-                </button>
-                <button type="button" data-main-tab="groups" data-nav-variant="mobile" class="main-nav-btn relative py-2 flex flex-col items-center gap-0.5 text-[10px] font-bold transition text-stone-600">
-                    <i class="fa-solid fa-people-group text-base"></i><span data-label="navGroups" class="max-w-full truncate px-1">Nhóm</span>
-                </button>
-                <button type="button" data-main-tab="noti" data-nav-variant="mobile" class="main-nav-btn relative py-2 flex flex-col items-center gap-0.5 text-[10px] font-bold transition text-stone-600">
-                    <i class="fa-solid fa-bell text-base"></i><span data-label="navNoti" class="max-w-full truncate px-1">Thông báo</span><span class="noti-badge hidden absolute top-0.5 left-1/2 ml-1.5 min-w-[16px] h-[16px] px-1 rounded-full bg-rose-500 text-white text-[9px] font-bold flex items-center justify-center">0</span>
-                </button>
-                <button type="button" data-main-tab="members" data-nav-variant="mobile" class="main-nav-btn relative py-2 flex flex-col items-center gap-0.5 text-[10px] font-bold transition text-stone-600">
-                    <i class="fa-solid fa-users text-base"></i><span data-label="navMembers" class="max-w-full truncate px-1">Thành viên</span>
-                </button>
-            </nav>
         </header>
+        <div class="community-layout">
+            <nav aria-label="Điều hướng chính" id="main-nav-desktop" class="hidden lg:flex flex-1 min-w-0 items-center justify-center gap-1 mx-2">
+                    <button type="button" data-main-tab="home" title="Trang chủ" class="main-nav-btn relative h-10 px-3 xl:px-4 rounded-xl text-sm font-bold flex items-center gap-2 transition text-stone-600 hover:bg-cream">
+                        <i class="fa-solid fa-house"></i><span data-label="navHome" class="hidden xl:inline max-w-[120px] truncate">Trang chủ</span>
+                    </button>
+                    <button type="button" data-main-tab="lounge" title="Giao lưu" class="main-nav-btn relative h-10 px-3 xl:px-4 rounded-xl text-sm font-bold flex items-center gap-2 transition text-stone-600 hover:bg-cream">
+                        <i class="fa-solid fa-comments"></i><span data-label="navLounge" class="hidden xl:inline max-w-[120px] truncate">Giao lưu</span>
+                    </button>
+                    <button type="button" data-main-tab="groups" title="Nhóm" class="main-nav-btn relative h-10 px-3 xl:px-4 rounded-xl text-sm font-bold flex items-center gap-2 transition text-stone-600 hover:bg-cream">
+                        <i class="fa-solid fa-people-group"></i><span data-label="navGroups" class="hidden xl:inline max-w-[120px] truncate">Nhóm</span>
+                    </button>
+                    <button type="button" data-main-tab="noti" title="Thông báo" class="main-nav-btn relative h-10 px-3 xl:px-4 rounded-xl text-sm font-bold flex items-center gap-2 transition text-stone-600 hover:bg-cream">
+                        <i class="fa-solid fa-bell"></i><span data-label="navNoti" class="hidden xl:inline max-w-[120px] truncate">Thông báo</span><span class="noti-badge hidden absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-rose-500 text-white text-[10px] font-bold flex items-center justify-center ring-2 ring-white">0</span>
+                    </button>
+                    <button type="button" data-main-tab="members" title="Thành viên" class="main-nav-btn relative h-10 px-3 xl:px-4 rounded-xl text-sm font-bold flex items-center gap-2 transition text-stone-600 hover:bg-cream">
+                        <i class="fa-solid fa-users"></i><span data-label="navMembers" class="hidden xl:inline max-w-[120px] truncate">Thành viên</span>
+                    </button>
+                </nav>
+            <div class="community-content">
+
 
         <!-- Admin Member-Preview Notice Bar -->
         <div id="member-preview-banner" class="hidden bg-violet-600 text-white text-xs sm:text-sm font-bold py-2 px-4">
@@ -1047,11 +1067,10 @@
                 <section class="bg-paper theme-surface rounded-3xl p-4 sm:p-5 border shadow-sm">
                     <div class="flex items-center justify-between gap-2 mb-3">
                         <h3 class="text-sm font-bold text-stone-700 flex items-center gap-2">
-                            <span>📡</span> <span id="lbl-radar-title">Radar check-in hội báo thủ</span>
+                            <span>📡</span> <span id="lbl-radar-title">Hôm nay các con thế nào?</span>
                         </h3>
-                        <button type="button" data-goto-tab="members" class="text-[11px] font-bold theme-accent-text hover:underline">Xem tất cả →</button>
-                    </div>
-                    <div id="home-members-strip" class="flex items-center gap-3 overflow-x-auto pb-1"></div>
+                        </div>
+                    <p id="home-current-mood" class="text-base font-semibold theme-accent-text"></p>
                 </section>
             </section>
 
@@ -1073,14 +1092,13 @@
                     <div class="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-stone-200/70">
                         <div class="flex items-center gap-2">
                             <label for="lounge-image-input" class="px-3 py-1.5 rounded-xl bg-cream border border-stone-200/70 text-xs font-bold text-stone-600 hover:opacity-80 cursor-pointer flex items-center gap-1.5 transition" title="Thêm tối đa 4 ảnh">
-                                <i class="fa-regular fa-images text-emerald-500"></i> Ảnh
+                                <i class="fa-regular fa-images text-emerald-500"></i> Thêm ảnh
                             </label>
                             <input type="file" id="lounge-image-input" accept="image/*" multiple class="hidden">
                             <select id="lounge-post-tag" class="px-2.5 py-1.5 rounded-xl bg-cream border border-stone-200 text-xs font-bold text-stone-600 outline-none">
                                 <option value="💬 Hóng biến">💬 Hóng biến</option>
                                 <option value="🧋 Lên kèo">🧋 Lên kèo</option>
-                                <option value="🎵 Flex nhạc">🎵 Flex nhạc</option>
-                                <option value="🤡 Hệ vô tri">🤡 Hệ vô tri</option>
+                                <option value="🤡 Vớ vẩn">🤡 Vớ vẩn</option>
                             </select>
                         </div>
                         <button type="submit" id="btn-lounge-submit" class="px-5 py-2 rounded-xl theme-btn font-bold text-xs sm:text-sm transition flex items-center gap-1.5">
@@ -1093,8 +1111,7 @@
                     <button type="button" data-lounge-filter="all" class="lounge-filter-btn shrink-0 px-3 py-1 rounded-full text-xs font-bold theme-tab-active transition">Tất cả</button>
                     <button type="button" data-lounge-filter="💬 Hóng biến" class="lounge-filter-btn shrink-0 px-3 py-1 rounded-full text-xs font-bold bg-cream text-stone-600 border border-stone-200/70 transition">💬 Hóng biến</button>
                     <button type="button" data-lounge-filter="🧋 Lên kèo" class="lounge-filter-btn shrink-0 px-3 py-1 rounded-full text-xs font-bold bg-cream text-stone-600 border border-stone-200/70 transition">🧋 Lên kèo</button>
-                    <button type="button" data-lounge-filter="🎵 Flex nhạc" class="lounge-filter-btn shrink-0 px-3 py-1 rounded-full text-xs font-bold bg-cream text-stone-600 border border-stone-200/70 transition">🎵 Flex nhạc</button>
-                    <button type="button" data-lounge-filter="🤡 Hệ vô tri" class="lounge-filter-btn shrink-0 px-3 py-1 rounded-full text-xs font-bold bg-cream text-stone-600 border border-stone-200/70 transition">🤡 Vô tri</button>
+                    <button type="button" data-lounge-filter="🤡 Vớ vẩn" class="lounge-filter-btn shrink-0 px-3 py-1 rounded-full text-xs font-bold bg-cream text-stone-600 border border-stone-200/70 transition">🤡 Vớ vẩn</button>
                 </div>
 
                 <div id="lounge-feed" class="space-y-4"></div>
@@ -1411,6 +1428,8 @@
                 </div>
             </section>
         </main>
+            </div>
+        </div>
     </div>
 
     <!-- ==================== MODALS ==================== -->
@@ -1969,7 +1988,7 @@
         const DEFAULT_LABELS = {
             siteTitle: 'When We Are Together',
             loginSubtitle: 'Ổ bí mật lưu ảnh dìm, drama & mấy pha vô tri của hội mình 🤡',
-            radarTitle: 'Radar check-in hội báo thủ',
+            radarTitle: 'Hôm nay các con thế nào?',
             groupsTitle: 'Các Ổ Chơi Riêng',
             groupsSubtitle: 'Chọn đúng nhóm rồi nhập Passcode để vào xem ảnh dìm & mật thư nha',
             loungeTitle: 'Sảnh Hóng Biến & Rủ Kèo',
@@ -2009,7 +2028,7 @@
             wheelRotation: 0,
             // Theme preferences (Creative Themes OR 7 pastel palettes + light/dark mode)
             themeStyle: localStorage.getItem('wwat_theme') || 'pastel',
-            themePalette: localStorage.getItem('wwat_palette') || 'sakura',
+            themePalette: localStorage.getItem('wwat_palette') || 'lagoon',
             themeMode: localStorage.getItem('wwat_mode') || 'light',
             pickerTab: localStorage.getItem('wwat_theme') && localStorage.getItem('wwat_theme') !== 'pastel' ? 'themes' : 'colors',
 
@@ -2567,7 +2586,7 @@
 
         function applyTheme(palette, mode, persistToAccount = false, themeStyle = state.themeStyle) {
             state.themeStyle = themeStyle || 'pastel';
-            state.themePalette = palette || 'sakura';
+            state.themePalette = palette || 'lagoon';
             state.themeMode = mode || 'light';
 
             if (state.themeStyle === 'pastel') {
@@ -2974,14 +2993,8 @@
             const current = state.activeGroupId ? 'groups' : state.mainTab;
             document.querySelectorAll('.main-nav-btn').forEach(btn => {
                 const active = btn.getAttribute('data-main-tab') === current;
-                if (btn.getAttribute('data-nav-variant') === 'mobile') {
-                    btn.classList.toggle('theme-accent-text', active);
-                    btn.classList.toggle('text-stone-600', !active);
-                    btn.style.boxShadow = active ? 'inset 0 -3px 0 var(--accent)' : '';
-                } else {
-                    btn.classList.toggle('theme-tab-active', active);
-                    btn.classList.toggle('text-stone-600', !active);
-                }
+                btn.classList.toggle('theme-tab-active', active);
+                btn.classList.toggle('text-stone-600', !active);
                 btn.setAttribute('aria-current', active ? 'page' : 'false');
             });
         }
@@ -2993,7 +3006,7 @@
                 case 'groups': renderGroupsGrid(); break;
                 case 'noti': renderNoti(); break;
                 case 'members': renderMembers(); break;
-                default: renderHomeMembersStrip();
+                default: break;
             }
         }
 
@@ -3068,33 +3081,13 @@
             document.getElementById('home-role-badge').textContent = isAdmin ? '👑 Trưởng nhóm (Admin)' : '💛 Thành viên';
             document.getElementById('greeting-text').textContent = `${greet.text}, ${user.displayName}${user.nickname ? ` (${user.nickname})` : ''}!`;
 
+            document.getElementById('home-current-mood').textContent = [user.moodEmoji, user.moodText].filter(Boolean).join(' ') || 'Bạn chưa chọn mood. Bấm Set Mood hôm nay để cập nhật nhé.';
             const quoteIdx = new Date().getDate() % dailyQuotes.length;
             document.getElementById('home-daily-quote').textContent = dailyQuotes[quoteIdx];
 
             document.getElementById('stat-members').textContent = state.accounts.length;
             document.getElementById('stat-groups').textContent = state.groups.length;
             document.getElementById('stat-memories').textContent = state.photos.length + state.notes.length;
-        }
-
-        function renderHomeMembersStrip() {
-            const strip = document.getElementById('home-members-strip');
-            if (!strip) return;
-            if (state.accounts.length === 0) {
-                strip.innerHTML = `<p class="text-xs text-stone-400">Chưa có thành viên nào.</p>`;
-                return;
-            }
-            strip.innerHTML = state.accounts.map(m => `
-                <div class="shrink-0 flex items-center gap-2.5 bg-cream px-3 py-2 rounded-2xl border border-stone-200/70 max-w-[230px]">
-                    <div class="relative shrink-0">
-                        ${renderAvatarHtml(m, 'w-10 h-10 text-xs')}
-                        <span class="absolute -bottom-1 -right-1 text-sm bg-white rounded-full w-5 h-5 flex items-center justify-center shadow-sm">${escapeHtml(m.moodEmoji || '😊')}</span>
-                    </div>
-                    <div class="min-w-0">
-                        <p class="text-xs font-bold text-stone-800 truncate">${escapeHtml(m.displayName)}</p>
-                        <p class="text-[11px] text-stone-500 truncate">${escapeHtml(m.moodText || 'Đang ghé thăm nhà chung')}</p>
-                    </div>
-                </div>
-            `).join('');
         }
 
         function renderPostImages(post) {
@@ -3140,7 +3133,7 @@
 
             const filtered = state.loungeFilter === 'all'
                 ? state.loungePosts
-                : state.loungePosts.filter(p => p.tag === state.loungeFilter);
+                : state.loungePosts.filter(p => p.tag === state.loungeFilter || (state.loungeFilter === '🤡 Vớ vẩn' && ['🤡 Hệ vô tri', '🎵 Flex nhạc'].includes(p.tag)));
 
             if (filtered.length === 0) {
                 feed.innerHTML = `
